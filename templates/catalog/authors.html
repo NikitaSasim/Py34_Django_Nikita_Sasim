@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %} {{title}} books {% endblock %}
+{% block title %} All authors {% endblock %}
 {% block content %}
 
 <main>
@@ -7,21 +7,19 @@
     <div class="album py-5 bg-light" bis_skin_checked="1">
         <div class="container" bis_skin_checked="1">
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" bis_skin_checked="1">
-                {% for book in books %}
+                {% for author in authors %}
 
                         <div class="col" bis_skin_checked="1">
                             <div class="card shadow-sm" bis_skin_checked="1">
-                                <img src="{{book.cover.url}}" width=200px, height=300px>
+                                <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
                                 <div class="card-body" bis_skin_checked="1">
-                                    <H5 class="card-text"> {{book.title}}</H5>
-                                    <p class="card-text">{{book.author}}, {{book.get_date}} год.</p>
+                                    <H4 class="card-text"> {{author}}</H4>
+                                    <p class="card-text">{{author.date_of_birth}}, год.</p>
                                     <p class="card-text">{{book.get_genre}}</p>
-                                    <div class="d-flex justify-content-between align-items-center" bis_skin_checked="1" s>
+                                    <div class="d-flex justify-content-between align-items-center" bis_skin_checked="1">
                                         <div class="btn-group" bis_skin_checked="1">
-                                            <a href="{{ book.get_book_url }}" type="button" class="btn btn-sm btn-outline-secondary">View</a>
-                                            <button type="button" class="btn btn-sm btn btn-dark">Add to cart</button>
+                                            <a href="{{ author.get_author_url }}" class="btn btn-sm btn-outline-secondary">{{ author.last_name }}'s</a>
                                         </div>
-                                        <span class="badge bg-success">${{book.price}}$</span>
                                     </div>
                                 </div>
                             </div>
