@@ -71,8 +71,9 @@ class SearchView(TemplateView):
         books_by_genre = Book.objects.filter(genre__name__iregex=search)
         books_by_last_name = Book.objects.filter(author__last_name__iregex=search)
         books_by_first_name = Book.objects.filter(author__first_name__iregex=search)
+        books_by_price = Book.objects.filter(price__iregex=search)
 
-        books_by_all = books_by_title.union(books_by_summary, books_by_publication_date, books_by_genre, books_by_last_name, books_by_first_name)
+        books_by_all = books_by_title.union(books_by_summary, books_by_publication_date, books_by_genre, books_by_last_name, books_by_first_name, books_by_price)
 
         params = {
             'books': books_by_all,
