@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
-from .models import Book, Author
+from .models import Book, Author, Genre
 
 
 # Create your views here.
@@ -8,11 +8,14 @@ from .models import Book, Author
 class CatalogView(TemplateView):
     template_name = "catalog/catalog.html"
 
+
     def get(self, request):
         books = Book.objects.all()
+        genres = Genre.objects.all()
         params = {
             'title': "All",
-            'books': books
+            'books': books,
+            'genres': genres,
 
         }
         return render(request, self.template_name, params)
@@ -23,10 +26,12 @@ class BookView(TemplateView):
 
     def get(self, request, id):
         book = Book.objects.get(id=id)
+        genres = Genre.objects.all()
 
         params = {
             'title': f"{book.title} detail",
-            'book': book
+            'book': book,
+            'genres': genres,
         }
 
         return render(request, self.template_name, params)
@@ -37,9 +42,11 @@ class AuthorsView(TemplateView):
 
     def get(self, request):
         authors = Author.objects.all()
+        genres = Genre.objects.all()
 
         params = {
-            'authors': authors
+            'authors': authors,
+            'genres': genres,
 
         }
         return render(request, self.template_name, params)
@@ -51,11 +58,13 @@ class AuthorCatalogView(TemplateView):
     def get(self, request, first_name, last_name, id):
         author = Author.objects.get(id=id)
         books = Book.objects.filter(author=author)
+        genres = Genre.objects.all()
 
         params = {
             'title': f"{last_name}'s",
             'author': author,
-            'books': books
+            'books': books,
+            'genres': genres,
         }
         return render(request, self.template_name, params)
 
@@ -72,14 +81,30 @@ class SearchView(TemplateView):
         books_by_last_name = Book.objects.filter(author__last_name__iregex=search)
         books_by_first_name = Book.objects.filter(author__first_name__iregex=search)
         books_by_price = Book.objects.filter(price__iregex=search)
+        genres = Genre.objects.all()
 
         books_by_all = books_by_title.union(books_by_summary, books_by_publication_date, books_by_genre, books_by_last_name, books_by_first_name, books_by_price)
 
         params = {
             'books': books_by_all,
-            'title': f"'{search}'"
+            'title': f"'{search}'",
+            'genres': genres,
         }
 
         return render(request, self.template_name, params)
 
 
+class GenreCatalogView(TemplateView):
+    template_name = "catalog/catalog.html"
+
+    def get(self, request, id):
+        genre = Genre.objects.get(id=id)
+        books = Book.objects.filter(genre=genre)
+        genres = Genre.objects.all()
+
+        params = {
+            'title': f"{genre.name}'s",
+            'books': books,
+            'genres': genres,
+        }
+        return render(request, self.template_name, params)

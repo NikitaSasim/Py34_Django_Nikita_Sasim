@@ -22,6 +22,10 @@ class Genre(models.Model):
     def __str__(self):
         return self.name
 
+    def get_genre_url(self):
+        return reverse("catalog-genres", args=[self.id])
+
+
 class Book(models.Model):
     title = models.TextField()
     summary = models.TextField()
