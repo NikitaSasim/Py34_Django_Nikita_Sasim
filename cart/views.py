@@ -19,5 +19,20 @@ class CartView(RedirectView):
 
         return redirect('catalog-index')
 
+class CartViewRemove(RedirectView):
+
+    def get(self, request):
+        return redirect('catalog-index')
+
+    @method_decorator(login_required)
+    def post(self, request):
+        book = Book.objects.get(id=request.POST['book_id'])
+        cart = Cart.objects.get(user=request.user)
+        cart.products.remove(book)
+
+        return redirect('catalog-index')
+
+
+
 
 
