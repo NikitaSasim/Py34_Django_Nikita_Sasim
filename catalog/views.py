@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from .models import Book, Author, Genre
+from cart.models import Cart
 
 
 # Create your views here.
@@ -10,8 +11,18 @@ class CatalogView(TemplateView):
 
 
     def get(self, request):
+        try:
+            Cart.objects.get(user=request.user)
+        except:
+
+            try:
+                Cart.objacts.create(user=request.user)
+            except:
+                print("User is anonymous")
+
         books = Book.objects.all()
         genres = Genre.objects.all()
+
         params = {
             'title': "All",
             'books': books,
