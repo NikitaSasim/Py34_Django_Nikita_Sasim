@@ -15,22 +15,22 @@
 
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
               <li><a href="{% url 'catalog-index' %}" class="nav-link px-2 text-secondary">Home</a></li>
+              {% if genres %}
               <li><a href="{% url 'catalog-index' %}" class="nav-link px-2 text-white">Books</a></li>
               <li><a href="{% url 'catalog-author' %}" class="nav-link px-2 text-white">Authors</a></li>
-              {% if user.is_authenticated %}
-                <li>
-                        <div class="dropdown" style="height: 120 overflow-y:scroll">
-                            <span class="nav-link px-2 text-white dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="height:120 overflow-y:scroll" >
+              <li>
+                        <div class="dropdown">
+                            <span class="nav-link px-2 text-white dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                               Genres
                             </span>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton"  >
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="height: 370px; overflow-y:scroll;">
                               {% for genre in genres %}
 
                                 <a class="dropdown-item" href="{{ genre.get_genre_url }}">{{genre.name}}</a>
                               {% endfor %}
                             </div>
                         </div>
-                </li>
+              </li>
               {% endif %}
               <li><a href="#" class="nav-link px-2 text-white">About</a></li>
             </ul>
@@ -42,40 +42,40 @@
 
 
             {% if user.is_authenticated %}
-              <div hidden>
-                    <div data-name="popover-content">
-                        <table class="table table-hover">
-                            <tbody>
-                            {% for cart in user.cart.all %}
-                            {% for book in cart.products.all %}
+
+              <div class="dropdown">
+                    <a class="btn btn-outline-light dropdown-toggle" id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Cart {{user.cart.first.get_total_quantity}}</span></a>
+                    <div class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton">
+                        <div style="height: 370px; overflow-y:scroll;">
+                            <table class="table table-hover">
+                                <tbody>
+                                    {% for book in user.cart.first.products.all %}
 
 
-                                <tr>
-                                    <td> <img  src="{{book.cover.url}}"width="40px" height="60px"> </td>
-                                    <td style="vertical-align: middle;">{{book.title}}</td>
-                                    <td style="vertical-align: middle;">{{book.price}}</td>
-                                    <td style="vertical-align: middle;">
-                                        <form action="{% url 'cart-remove' %}" method="post">
-                                            {% csrf_token %}
-                                            <button type="submit" class="btn btn-sm btn btn-danger">x</button>
-                                            <input type="hidden" name="book_id" value="{{ book.id }}">
-                                        </form>
-                                    </td>
-                                </tr>
+                                        <tr>
+                                            <td> <img  src="{{book.cover.url}}"width="40px" height="60px"> </td>
+                                            <td style="vertical-align: middle;">{{book.title}}</td>
+                                            <td style="vertical-align: middle;">{{book.price}}</td>
+                                            <td style="vertical-align: middle;">
+                                                <form action="{% url 'cart-remove' %}" method="post">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn btn-sm btn btn-danger">x</button>
+                                                    <input type="hidden" name="book_id" value="{{ book.id }}">
+                                                </form>
+                                            </td>
+                                        </tr>
 
-                            {% endfor %}
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                        {% for cart in user.cart.all %}
-                        <h6>Quantity {{cart.get_total_quantity}}</h6>
-                        <h5>Subtotal ${{cart.get_total_price}}</h5>
-                        {% endfor %}
-                        <a class="btn btn-primary center" href="#">Buy</a>
-
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <h6>Quantity {{user.cart.first.get_total_quantity}}</h6>
+                        <h5>Subtotal ${{user.cart.first.get_total_price}}</h5>
+                        <a class="btn btn-primary" style="width: 90%;" href="#">Buy</a>
                     </div>
               </div>
-                <a class="btn btn-outline-light" data-bs-toggle="popover" data-bs-placement="bottom" id="cart">Cart  {{ user.cart.first.get_total_quantity }}</a>
+
+
             <span class="px-4" class="text-white"> Hellow, {{user.username}}</span> <a href="{% url 'logout' %}" class="btn btn-danger me-2">Logout</a>
              {% else %}
             <div class="text-end" bis_skin_checked="1">
