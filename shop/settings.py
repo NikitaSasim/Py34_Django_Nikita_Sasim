@@ -37,14 +37,16 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
     "catalog",
     "accounts",
-    "cart"
-]
+    "cart",
+    "api"
+    ]
 
 SOCIALACCOUNT_LOGIN_ON_GET = True
 
