@@ -14,9 +14,8 @@ class CatalogView(TemplateView):
         try:
             Cart.objects.get(user=request.user)
         except:
-
             try:
-                Cart.objacts.create(user=request.user)
+                Cart.objects.create(user=request.user)
             except:
                 print("User is anonymous")
 
