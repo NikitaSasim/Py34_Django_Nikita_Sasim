@@ -67,7 +67,7 @@ class SearchView(TemplateView):
         search = request.POST['search']
         books_by_title = Book.objects.filter(title__iregex=search)
         books_by_summary = Book.objects.filter(summary__iregex=search)
-        books_by_publication_date = Book.objects.filter(publication_date__iregex=search)
+        books_by_publication_date = Book.objects.filter(publication_date__year__iregex=search)
         books_by_genre = Book.objects.filter(genre__name__iregex=search)
         books_by_last_name = Book.objects.filter(author__last_name__iregex=search)
         books_by_first_name = Book.objects.filter(author__first_name__iregex=search)

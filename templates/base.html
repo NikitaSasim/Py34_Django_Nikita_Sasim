@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+    <script type='text/javascript' src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js'></script>
 </head>
 <body>
     <header class="p-3 bg-dark text-white">
@@ -24,6 +26,40 @@
             </form>
 
             {% if user.is_authenticated %}
+              <div hidden>
+                    <div data-name="popover-content">
+                        <table class="table table-hover">
+                            <tbody>
+                            {% for cart in user.cart.all %}
+                            {% for book in cart.products.all %}
+
+
+                                <tr>
+                                    <td> <img  src="{{book.cover.url}}"width="40px" height="60px"> </td>
+                                    <td style="vertical-align: middle;">{{book.title}}</td>
+                                    <td style="vertical-align: middle;">{{book.price}}</td>
+                                    <td style="vertical-align: middle;">
+                                        <form action="{% url 'cart-remove' %}" method="post">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-sm btn btn-danger">x</button>
+                                            <input type="hidden" name="book_id" value="{{ book.id }}">
+                                        </form>
+                                    </td>
+                                </tr>
+
+                            {% endfor %}
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        {% for cart in user.cart.all %}
+                        <h6>Quantity {{cart.get_total_quantity}}</h6>
+                        <h5>Subtotal ${{cart.get_total_price}}</h5>
+                        {% endfor %}
+                        <a class="btn btn-primary center" href="#">Buy</a>
+
+                    </div>
+              </div>
+                <a class="btn btn-outline-light" data-bs-toggle="popover" data-bs-placement="bottom" id="cart">Cart</a>
             <span class="px-4" class="text-white"> Hellow, {{user.username}}</span> <a href="{% url 'logout' %}" class="btn btn-danger me-2">Logout</a>
              {% else %}
             <div class="text-end" bis_skin_checked="1">
@@ -46,5 +82,19 @@
 
 
     {% block content %}{% endblock %}
+
+
+
+<script type='text/javascript'>
+        $(document).ready(function() {
+
+        var options = {
+          html: true,
+          content: $('[data-name="popover-content"]')
+        }
+        var exampleEl = document.getElementById('cart')
+        var popover = new bootstrap.Popover(exampleEl, options)
+        })
+</script>
 </body>
 </html>
