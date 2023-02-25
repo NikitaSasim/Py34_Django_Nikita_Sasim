@@ -34,7 +34,7 @@ class Book(models.Model):
     amount = models.IntegerField(null=False)
     genre = models.ManyToManyField(Genre)
     author = models.ForeignKey(Author, on_delete=models.CASCADE, null=True, related_name="books")
-    cover = models.ImageField(upload_to='covers/', blank=True)
+    cover = models.ImageField(upload_to='covers/', default='covers/Book', blank=False)
 
     def __str__(self):
         return self.title
